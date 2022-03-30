@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react'
 import '../App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Form, Button, Modal, ListGroup } from 'react-bootstrap';
-import { AddMWG, GetAllUsers } from '../Services/DataService'
+import { AddMWG, GetAllUsers, AddMemberToMWG } from '../Services/DataService'
 import UserContext from '../Context/UserContext';
 
 export default function UserDashboard() {
@@ -18,8 +18,11 @@ export default function UserDashboard() {
         let fetchedData = await GetAllUsers();
         console.log(fetchedData);
         setAllUsers(fetchedData);
-        
-    }   
+    }
+    
+    const addMember = async (e) => {
+        AddMemberToMWG(e)
+    }
 
     const CreateMWG = async () => {
         // AddMWG()
@@ -56,7 +59,10 @@ export default function UserDashboard() {
                                         allUsers.map((user, idx) => {
                                             return (
                                                 <>
-                                                    <ListGroup.Item as="li">{user.username}</ListGroup.Item>
+                                                    <ListGroup.Item as="li"
+                                                    key={idx}
+                                                    onClick={({ target: { value } }) => addMember(value)}
+                                                    >{user.username}</ListGroup.Item>
                                                 </>
                                             )
                                         })

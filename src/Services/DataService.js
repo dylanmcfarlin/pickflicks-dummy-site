@@ -34,4 +34,12 @@ async function GetAllUsers(){
     return data;
 }
 
-export { Login, GetUserByUsername, AddMWG, GetAllUsers };
+async function AddMemberToMWG(MWGId,newMemberId){
+    let res = await fetch(`http://localhost:5238/User/AddMemberToMWG/${MWGId}/${newMemberId}`);
+    let data = await res.json();
+    return data;
+}
+
+
+
+export { Login, GetUserByUsername, AddMWG, GetAllUsers, AddMemberToMWG };
