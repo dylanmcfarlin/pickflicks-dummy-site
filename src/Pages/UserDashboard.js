@@ -10,7 +10,8 @@ import {
   Modal,
   ListGroup,
   InputGroup,
-  FormControl
+  FormControl,
+  Toast
 } from "react-bootstrap";
 import { AddMWG, GetAllUsers, AddMemberToMWG, GetUserByUsername } from "../Services/DataService";
 import UserContext from "../Context/UserContext";
@@ -37,13 +38,18 @@ export default function UserDashboard() {
         AddMemberToMWG(e)
     }
 
-    const handleClick = async () => {
-        let foundUser = await GetUserByUsername(searchedName);
-        if(foundUser != null)
-        {
-            
-        }
-    }
+  const handleClick = async () => {
+      let foundUser = await GetUserByUsername(searchedName);
+      if(foundUser != null)
+      {
+        allSearchedNames.push(searchedName);
+        setAllSearchedNames([...allSearchedNames]);
+        console.log(allSearchedNames);
+      }else{
+          console.log("noooo")
+        setShowA(!showA)
+      }
+  }
 
     const addMember = async (e) => {
         AddMemberToMWG(e);
@@ -61,8 +67,8 @@ export default function UserDashboard() {
             IsDeleted: false
         }
 
-        let result = await AddMWG(newMWG);
-        AddMWG(newMWG)
+      let result = await AddMWG(newMWG);
+      AddMWG(newMWG)
 
         if (result) {
             // setDisplayOfYourMWG = GetAllCreatedMWGByUserId(userId);
@@ -90,35 +96,6 @@ export default function UserDashboard() {
           <Modal.Title>Create new Watch Group</Modal.Title>
         </Modal.Header>
 
-<<<<<<< HEAD
-            <Modal.Body>
-                <Form>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Control type="text" placeholder="Enter a name for the group"
-                        onChange={({ target: { value } }) => setmwgName(value)}/>
-                    </Form.Group>
-                    <Col md={6} className="text-center">
-                        <Form.Label>Add members to the group</Form.Label>
-                        <Row className="justify-content-center ">
-                            <ListGroup as="ul">
-                                    {
-                                        allUsers.map((user, idx) => {
-                                            return (
-                                                <>
-                                                    <ListGroup.Item as="li"
-                                                    key={idx}
-                                                    onClick={({ target: { value } }) => addMember(value)}
-                                                    >{user.username}</ListGroup.Item>
-                                                </>
-                                            )
-                                        })
-                                    }
-                            </ListGroup>
-                        </Row>
-                    </Col>
-                </Form>
-            </Modal.Body>
-=======
         <Modal.Body>
           <Form>
             <InputGroup className="mb-3">
@@ -137,15 +114,15 @@ export default function UserDashboard() {
               <Form.Label>Add members to the group</Form.Label>
               <Row className="justify-content-center ">
                 <ListGroup as="ul">
-                  {allUsers.map((user, idx) => {
+                  {allSearchedNames.map((user, idx) => {
                     return (
                       <>
                         <ListGroup.Item
                           as="li"
                           key={idx}
-                          onClick={({ target: { value } }) => addMember(value)}
+                          // onClick={({ target: { value } }) => addMember(value)}
                         >
-                          {user.username}
+                          {user}
                         </ListGroup.Item>
                       </>
                     );
@@ -155,23 +132,25 @@ export default function UserDashboard() {
             </Col>
           </Form>
         </Modal.Body>
->>>>>>> c9f76e90ba4c377ce21c6fff07ed1399382b541c
 
-<<<<<<< HEAD
-        <Modal.Footer>
-          <Button variant="secondary">Close</Button>
-          <Button variant="primary" onClick={CreateMWG}>
-            Save changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-=======
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>Close</Button>
                 <Button variant="primary" onClick={CreateMWG}>Save changes</Button>
             </Modal.Footer>
         </Modal>
->>>>>>> 493ca7391e4d6a30c45ac9c310939056bdbb54df
+
+        <Toast show={showA} onClose={toggleShowA}>
+          <Toast.Header>
+            <img
+              src="holder.js/20x20?text=%20"
+              className="rounded me-2"
+              alt=""
+            />
+            <strong className="me-auto">Bootstrap</strong>
+            <small>11 mins ago</small>
+          </Toast.Header>
+          <Toast.Body>Woohoo, you're reading this text in a Toast!</Toast.Body>
+        </Toast>
     </>
   );
 }
