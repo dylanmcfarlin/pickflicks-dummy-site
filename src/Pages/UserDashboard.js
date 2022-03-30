@@ -11,6 +11,8 @@ export default function UserDashboard() {
 
     const [show, setShow] = useState(false);
     const [allUsers, setAllUsers] = useState([]);
+    const [mwgName, setmwgName] = useState('');
+    const [mwgMembersId, setmwgMembersId] = useState([]);
     
     const handleClose = () => setShow(false);
     const handleShow = async () => {
@@ -29,9 +31,9 @@ export default function UserDashboard() {
 
         let newMWG = {
             Id: 0,  
-            MWGName: '',
-            GroupCreatorId: '',
-            MembersId: '',
+            MWGName: mwgName,
+            GroupCreatorId: userId,
+            MembersId: mwgMembersId,
             UserSuggestedMovies: '',
             IsDeleted: false
         }
@@ -41,6 +43,7 @@ export default function UserDashboard() {
 
         if (result) {
             // setDisplayOfYourMWG = GetAllCreatedMWGByUserId(userId);
+            // setDisplayOfMWGYourMemberOf = GetAllMWGAUserIsMemberOf(userId);
         }
     }
  
@@ -65,7 +68,8 @@ export default function UserDashboard() {
             <Modal.Body>
                 <Form>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Control type="text" placeholder="Enter a name for the group"/>
+                        <Form.Control type="text" placeholder="Enter a name for the group"
+                        onChange={({ target: { value } }) => setmwgName(value)}/>
                     </Form.Group>
                     <Col md={6} className="text-center">
                         <Form.Label>Add members to the group</Form.Label>
