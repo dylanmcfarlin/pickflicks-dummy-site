@@ -10,7 +10,8 @@ import {
   Modal,
   ListGroup,
   InputGroup,
-  FormControl
+  FormControl,
+  Toast
 } from "react-bootstrap";
 import { AddMWG, GetAllUsers, AddMemberToMWG, GetUserByUsername } from "../Services/DataService";
 import UserContext from "../Context/UserContext";
@@ -22,6 +23,9 @@ export default function UserDashboard() {
   const [show, setShow] = useState(false);
   const [allUsers, setAllUsers] = useState([]);
   const [searchedName, setSearchedName] = useState("");
+  const [allSearchedNames, setAllSearchedNames] = useState([]);
+  const [showA, setShowA] = useState(false);
+  const toggleShowA = () => setShowA(!showA);
 
   const handleClose = () => setShow(false);
   const handleShow = async () => {
@@ -35,7 +39,12 @@ export default function UserDashboard() {
       let foundUser = await GetUserByUsername(searchedName);
       if(foundUser != null)
       {
-          
+        allSearchedNames.push(searchedName);
+        setAllSearchedNames([...allSearchedNames]);
+        console.log(allSearchedNames);
+      }else{
+          console.log("noooo")
+        setShowA(!showA)
       }
   }
 
@@ -44,26 +53,23 @@ export default function UserDashboard() {
   };
 
   const CreateMWG = async () => {
-    // AddMWG()
-  };
-    const CreateMWG = async () => {
-        handleClose();
+      handleClose();
 
-        let newMWG = {
-            Id: 0,  
-            MWGName: '',
-            GroupCreatorId: '',
-            MembersId: '',
-            UserSuggestedMovies: '',
-            IsDeleted: false
-        }
+      let newMWG = {
+          Id: 0,  
+          MWGName: '',
+          GroupCreatorId: '',
+          MembersId: '',
+          UserSuggestedMovies: '',
+          IsDeleted: false
+      }
 
-        let result = await AddMWG(newMWG);
-        AddMWG(newMWG)
+      let result = await AddMWG(newMWG);
+      AddMWG(newMWG)
 
-        if (result) {
-            // setDisplayOfYourMWG = GetAllCreatedMWGByUserId(userId);
-        }
+      if (result) {
+          // setDisplayOfYourMWG = GetAllCreatedMWGByUserId(userId);
+      }
     }
  
 
@@ -104,15 +110,15 @@ export default function UserDashboard() {
               <Form.Label>Add members to the group</Form.Label>
               <Row className="justify-content-center ">
                 <ListGroup as="ul">
-                  {allUsers.map((user, idx) => {
+                  {allSearchedNames.map((user, idx) => {
                     return (
                       <>
                         <ListGroup.Item
                           as="li"
                           key={idx}
-                          onClick={({ target: { value } }) => addMember(value)}
+                          // onClick={({ target: { value } }) => addMember(value)}
                         >
-                          {user.username}
+                          {user}
                         </ListGroup.Item>
                       </>
                     );
@@ -123,21 +129,24 @@ export default function UserDashboard() {
           </Form>
         </Modal.Body>
 
-<<<<<<< HEAD
-        <Modal.Footer>
-          <Button variant="secondary">Close</Button>
-          <Button variant="primary" onClick={CreateMWG}>
-            Save changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-=======
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>Close</Button>
                 <Button variant="primary" onClick={CreateMWG}>Save changes</Button>
             </Modal.Footer>
         </Modal>
->>>>>>> 493ca7391e4d6a30c45ac9c310939056bdbb54df
+
+        <Toast show={showA} onClose={toggleShowA}>
+          <Toast.Header>
+            <img
+              src="holder.js/20x20?text=%20"
+              className="rounded me-2"
+              alt=""
+            />
+            <strong className="me-auto">Bootstrap</strong>
+            <small>11 mins ago</small>
+          </Toast.Header>
+          <Toast.Body>Woohoo, you're reading this text in a Toast!</Toast.Body>
+        </Toast>
     </>
   );
 }
