@@ -34,26 +34,22 @@ export default function UserDashboard() {
         setAllUsers(fetchedData);
     }
     
-    const addMember = async (e) => {
+    const AddMember = async (e) => {
         AddMemberToMWG(e)
     }
 
-  const handleClick = async () => {
-      let foundUser = await GetUserByUsername(searchedName);
-      if(foundUser != null)
-      {
-        allSearchedNames.push(searchedName);
-        setAllSearchedNames([...allSearchedNames]);
-        console.log(allSearchedNames);
-      }else{
+    const handleClick = async () => {
+        let foundUser = await GetUserByUsername(searchedName);
+        if(foundUser != null)
+        {
+            allSearchedNames.push(searchedName);
+            setAllSearchedNames([...allSearchedNames]);
+            console.log(allSearchedNames);
+        }else{
           console.log("noooo")
-        setShowA(!showA)
-      }
-  }
-
-    const addMember = async (e) => {
-        AddMemberToMWG(e);
-    };
+            setShowA(!showA)
+        }
+    }
 
     const CreateMWG = async () => {
         handleClose();
