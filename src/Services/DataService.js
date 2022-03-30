@@ -1,5 +1,5 @@
 async function Login(userData){
-    let res= await fetch('http://localhost:5238/User/Login', {
+    let res= await fetch('https://pickflicksapi.azurewebsites.net/User/Login', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -11,13 +11,13 @@ async function Login(userData){
 }
 
 async function GetUserByUsername(username){
-    let res = await fetch('http://localhost:5238/User/GetUserByUsername/' + (username));
+    let res = await fetch('https://pickflicksapi.azurewebsites.net/User/GetUserByUsername/' + (username));
     let data = await res.json();
     return data;
 }
 
 async function AddMWG(newMWG, groupCreatorId){
-    let res= await fetch('http://localhost:5238/MWG/AddMWG/' + (groupCreatorId), {
+    let res= await fetch('https://pickflicksapi.azurewebsites.net/MWG/AddMWG/' + (groupCreatorId), {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -29,13 +29,13 @@ async function AddMWG(newMWG, groupCreatorId){
 }
 
 async function GetAllUsers(){
-    let res = await fetch('http://localhost:5238/User/GetAllUsers');
+    let res = await fetch('https://pickflicksapi.azurewebsites.net/User/GetAllUsers');
     let data = await res.json();
     return data;
 }
 
 async function AddMemberToMWG(MWGId,newMemberId){
-    let res = await fetch(`http://localhost:5238/User/AddMemberToMWG/${MWGId}/${newMemberId}`);
+    let res = await fetch(`https://pickflicksapi.azurewebsites.net/User/AddMemberToMWG/${MWGId}/${newMemberId}`);
     let data = await res.json();
     return data;
 }
