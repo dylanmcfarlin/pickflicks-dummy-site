@@ -46,6 +46,26 @@ export default function UserDashboard() {
   const CreateMWG = async () => {
     // AddMWG()
   };
+    const CreateMWG = async () => {
+        handleClose();
+
+        let newMWG = {
+            Id: 0,  
+            MWGName: '',
+            GroupCreatorId: '',
+            MembersId: '',
+            UserSuggestedMovies: '',
+            IsDeleted: false
+        }
+
+        let result = await AddMWG(newMWG);
+        AddMWG(newMWG)
+
+        if (result) {
+            // setDisplayOfYourMWG = GetAllCreatedMWGByUserId(userId);
+        }
+    }
+ 
 
   return (
     <>
@@ -103,6 +123,7 @@ export default function UserDashboard() {
           </Form>
         </Modal.Body>
 
+<<<<<<< HEAD
         <Modal.Footer>
           <Button variant="secondary">Close</Button>
           <Button variant="primary" onClick={CreateMWG}>
@@ -110,6 +131,13 @@ export default function UserDashboard() {
           </Button>
         </Modal.Footer>
       </Modal>
+=======
+            <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>Close</Button>
+                <Button variant="primary" onClick={CreateMWG}>Save changes</Button>
+            </Modal.Footer>
+        </Modal>
+>>>>>>> 493ca7391e4d6a30c45ac9c310939056bdbb54df
     </>
   );
 }
