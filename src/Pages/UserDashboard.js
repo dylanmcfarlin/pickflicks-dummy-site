@@ -84,49 +84,6 @@ export default function UserDashboard() {
     setShow1(true);
   }
 
-  const CreateMWG = async () => {
-    mwgMembersId.push(userId);
-    handleClose();
-
-    let newMWG = {
-      Id: 0,
-      MWGName: mwgName,
-      GroupCreatorId: userId,
-      MembersId: mwgMembersId.join(","),
-      MembersNames: allSearchedNames.join(","),
-      UserSuggestedMovies: "",
-      IsDeleted: false,
-    };
-    console.log(newMWG);
-
-    let result = await AddMWG(newMWG);
-    //   AddMWG(newMWG)
-
-    if (result) {
-      console.log("yay it worked");
-      let allCreatedMWG1 = await GetAllMWGAUserIsMemberOfuserId(userId);
-      setAllCreatedMWG([...allCreatedMWG1]);
-      // setDisplayOfYourMWG = GetAllCreatedMWGByUserId(userId);
-      // setDisplayOfMWGYourMemberOf = GetAllMWGAUserIsMemberOf(userId);
-    }
-  };
-
-<<<<<<< HEAD
-    const handleClick = async () => {
-        let foundUser = await GetUserByUsername(searchedName);
-        if(foundUser != null && foundUser.id != 0)
-        {
-            allSearchedNames.push(searchedName);
-            setAllSearchedNames([...allSearchedNames]);
-            mwgMembersId.push(foundUser.id);
-            console.log(mwgMembersId);
-            console.log(allSearchedNames);
-        }else{
-          console.log("noooo")
-          toggleShowA();
-        }
-    }
-
     const CreateMWG = async () => {
         mwgMembersId.push(userId);
         handleClose();
@@ -159,13 +116,6 @@ export default function UserDashboard() {
     // }, [])
 
  
-=======
-  // useEffect( async() => {
-  //   let allCreatedMWG = await GetAllCreatedMWGByUserId(userId);
-  //     console.log(allCreatedMWG)
-  //     setAllCreatedMWG(allCreatedMWG);
-  // }, [])
->>>>>>> f94d94411048e9b97a1d077b94148b6167d21a8a
 
   return (
     <>
