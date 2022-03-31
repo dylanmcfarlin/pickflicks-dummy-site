@@ -32,21 +32,25 @@ export default function UserDashboard() {
   const [showA, setShowA] = useState(false);
   const toggleShowA = () => setShowA(!showA);
   const [show, setShow] = useState(false);
+  const [show1, setShow1] = useState(false);
 
   const [allUsers, setAllUsers] = useState([]);
   const [searchedName, setSearchedName] = useState("");
   const [allSearchedNames, setAllSearchedNames] = useState([]);
   const [mwgName, setmwgName] = useState("");
   const [mwgMembersId, setmwgMembersId] = useState([]);
+  const [mwgMembersNames, setmwgMembersNames] = useState([]);
   const [allCreatedMWG, setAllCreatedMWG] = useState([]);
 
   useEffect(async () => {
     let lsUserId = localStorage.getItem('UserId')
+    setUserId(lsUserId);
     let allCreatedMWG1 = await GetAllMWGAUserIsMemberOfuserId(lsUserId);
     setAllCreatedMWG(allCreatedMWG1);
   }, []);
 
   const handleClose = () => setShow(false);
+  const handleClose1 = () => setShow1(false);
   const handleShow = async () => {
     setShow(true);
     // let fetchedData = await GetAllUsers();
@@ -71,6 +75,9 @@ export default function UserDashboard() {
       toggleShowA();
     }
   };
+  const handleShow1 = () => {
+    setShow1(true);
+  }
 
   const CreateMWG = async () => {
     mwgMembersId.push(userId);
@@ -81,7 +88,7 @@ export default function UserDashboard() {
       MWGName: mwgName,
       GroupCreatorId: userId,
       MembersId: mwgMembersId.join(","),
-      MembersNames: "",
+      MembersNames: allSearchedNames.join(","),
       UserSuggestedMovies: "",
       IsDeleted: false,
     };
@@ -92,6 +99,8 @@ export default function UserDashboard() {
 
     if (result) {
       console.log("yay it worked");
+      let allCreatedMWG1 = await GetAllMWGAUserIsMemberOfuserId(userId);
+      setAllCreatedMWG([...allCreatedMWG1]);
       // setDisplayOfYourMWG = GetAllCreatedMWGByUserId(userId);
       // setDisplayOfMWGYourMemberOf = GetAllMWGAUserIsMemberOf(userId);
     }
@@ -117,13 +126,14 @@ export default function UserDashboard() {
             <Row>
               <Row xs={1} md={2} className="g-4">
                 {allCreatedMWG.map((MWG) => {
+                    console.log(MWG)
                     return (
                         <Col>
-                        <Card>
+                        <Card onClick={handleShow1}>
                         <Card.Body>
                             <Card.Title>{MWG.mwgName}</Card.Title>
                             <Card.Text>
-                            {MWG.membersId}
+                            {MWG.membersNames}
                             </Card.Text>
                         </Card.Body>
                         </Card>
@@ -202,6 +212,69 @@ export default function UserDashboard() {
 
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={CreateMWG}>
+            Save changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Modal for editing MWG */}
+      <Modal show={show1} onHide={handleClose1}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit MWG</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <Form>
+            <input
+              type="text"
+              value={mwgName}
+              onChange={({ target: { value } }) => setmwgName(value)}
+            ></input>
+            <InputGroup className="mb-3">
+              <FormControl
+                placeholder="Recipient's username"
+                aria-label="Recipient's username"
+                aria-describedby="basic-addon2"
+                value={searchedName}
+                onChange={({ target: { value } }) => setSearchedName(value)}
+              />
+              <Button
+                variant="outline-secondary"
+                id="button-addon2"
+                onClick={handleClick}
+              >
+                Button
+              </Button>
+            </InputGroup>
+            <Col md={6} className="text-center">
+              <Form.Label>Add members to the group</Form.Label>
+              <Row className="justify-content-center ">
+                <ListGroup as="ul">
+                  {allSearchedNames.map((user, idx) => {
+                    return (
+                      <>
+                        <ListGroup.Item
+                            action
+                          as="li"
+                          key={idx}
+                          // onClick={({ target: { value } }) => addMember(value)}
+                        >
+                          {user}
+                        </ListGroup.Item>
+                      </>
+                    );
+                  })}
+                </ListGroup>
+              </Row>
+            </Col>
+          </Form>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose1}>
             Close
           </Button>
           <Button variant="primary" onClick={CreateMWG}>
