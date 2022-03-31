@@ -21,15 +21,19 @@ export default function CardComponent({ props }) {
   const [allCreatedMWG, setAllCreatedMWG] = useState([]);
 
   const handleUpdateMWG = () => {
-      let updatedMWg = {
+      let updatedMWG = {
         Id: props.id,
-        MWGName: props.mwgName,
+        MWGName: mwgName,
         GroupCreatorId: userId,
-        MembersId: "",
-        MembersNames: "",
+        MembersId: mwgMembersId.join(","),
+        MembersNames: mwgMembersNames.join(","),
         UserSuggestedMovies: "",
         IsDeleted: false,
       }
+  }
+
+  const handleRemoveMember = (e) => {
+    e.target.classList.toggle("active");
   }
  
 
@@ -37,7 +41,7 @@ export default function CardComponent({ props }) {
       console.log(e)
       console.log(props.mwgName)
     setmwgName(props.mwgName);
-    setmwgMembersNames(props.membersNames);
+    setmwgMembersNames(props.membersNames.split(","));
     setShow1(true);
   };
   return (
@@ -66,7 +70,34 @@ export default function CardComponent({ props }) {
               </Form>
           {/* <Modal.Title>{mwgName}</Modal.Title> */}
         </Modal.Header>
-        <Modal.Body>{mwgMembersNames}</Modal.Body>
+        <Modal.Body>
+        <ListGroup as="ul" >
+                  {mwgMembersNames.map((member, idx) => {
+                    return (
+                      <>
+                      <Row className="justify-content-center">
+                        <Col xs={6}>
+                            <ListGroup.Item
+                            active
+                                className="pointer"
+                            as="li"
+                            key={idx}
+                            onClick={(e) => handleRemoveMember(e)}
+                            // onClick={({ target: { value } }) => addMember(value)}
+                            >
+                            {member}
+                            </ListGroup.Item>
+
+                        </Col>
+
+                      </Row>
+                      </>
+                    );
+                  })}
+                </ListGroup>
+            
+            
+            </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose1}>
             Close
