@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Col, Card, Modal, Form, InputGroup, FormControl, Button, ListGroup, Row } from "react-bootstrap";
 import UserContext from "../Context/UserContext";
+import { GetUserByUsername, EditMWG, GetAllMWGAUserIsMemberOfuserId } from '../Services/DataService';
 
 export default function CardComponent({ props }) {
   const [show1, setShow1] = useState(false);
@@ -20,7 +21,7 @@ export default function CardComponent({ props }) {
   const [mwgMembersNames, setmwgMembersNames] = useState([]);
   const [allCreatedMWG, setAllCreatedMWG] = useState([]);
 
-  const handleUpdateMWG = () => {
+  const handleUpdateMWG = async () => {
       let updatedMWG = {
         Id: props.id,
         MWGName: mwgName,
@@ -30,20 +31,63 @@ export default function CardComponent({ props }) {
         UserSuggestedMovies: "",
         IsDeleted: false,
       }
+      let result = await EditMWG(updatedMWG);
+      console.log(result);
+      if (result) {
+        let allMWG = await GetAllMWGAUserIsMemberOfuserId(userId);
+        setAllCreatedMWG([...allMWG]);
+        handleClose1();
+      }
   }
 
-  const handleRemoveMember = (e) => {
+  const handleRemoveMember = async (e) => {
     e.target.classList.toggle("active");
+    e.target.remove();
+
+    // Remove name
+    let indexOfDeletedMember = mwgMembersNames.indexOf(e.target.textContent);
+    console.log(indexOfDeletedMember);
+    let splicedDeletedMember = mwgMembersNames.splice(indexOfDeletedMember, 1);
+    console.log(mwgMembersNames);
+
+    // Remove id
+    let userInfo = await GetUserByUsername(e.target.textContent);
+    console.log(userInfo.id);
+    
+    let indexOfDeletedMemberId = mwgMembersId.indexOf(userInfo.id);
+    console.log(indexOfDeletedMemberId);
+
+    let splicedDeletedMemberId = mwgMembersId.splice(indexOfDeletedMemberId, 1);
+    console.log(mwgMembersId);
   }
+
+
  
 
   const handleShow1 = async (e) => {
       console.log(e)
       console.log(props.mwgName)
-    setmwgName(props.mwgName);
-    setmwgMembersNames(props.membersNames.split(","));
-    setShow1(true);
+      setmwgName(props.mwgName);
+      setmwgMembersNames(props.membersNames.split(","));
+      setShow1(true);
   };
+
+
+  const handleSearchMember = async () => {
+    let foundUser = await GetUserByUsername(searchedName);
+    if (foundUser != null && foundUser.id != 0) {
+
+      mwgMembersId.push(foundUser.id);
+      mwgMembersNames.push(foundUser.username);
+      console.log(mwgMembersNames);
+      setmwgMembersNames([...mwgMembersNames]);
+      
+    } else {
+      console.log("noooo");
+      toggleShowA();
+    }
+  }
+
   return (
     <>
       <Col>
@@ -72,32 +116,49 @@ export default function CardComponent({ props }) {
         </Modal.Header>
         <Modal.Body>
         <ListGroup as="ul" >
-                  {mwgMembersNames.map((member, idx) => {
-                    return (
-                      <>
-                      <Row className="justify-content-center">
-                        <Col xs={6}>
-                            <ListGroup.Item
-                            active
-                                className="pointer"
-                            as="li"
-                            key={idx}
-                            onClick={(e) => handleRemoveMember(e)}
-                            // onClick={({ target: { value } }) => addMember(value)}
-                            >
-                            {member}
-                            </ListGroup.Item>
+          {mwgMembersNames.map((member, idx) => {
+            return (
+              <>
+              <Row className="justify-content-center">
+                <Col xs={6}>
+                    <ListGroup.Item
+                    active
+                    className="pointer"
+                    as="li"
+                    key={idx}
+                    onClick={(e) => handleRemoveMember(e)}
+                    // onClick={({ target: { value } }) => addMember(value)}
+                    >
+                    {member}
+                    </ListGroup.Item>
 
-                        </Col>
+                </Col>
 
-                      </Row>
-                      </>
-                    );
-                  })}
-                </ListGroup>
+              </Row>
+              </>
+            );
+          })}
+          </ListGroup>
+          <Form>
+            <InputGroup className="mb-3">
+              <FormControl
+                placeholder="Recipient's username"
+                aria-label="Recipient's username"
+                aria-describedby="basic-addon2"
+                value={searchedName}
+                onChange={({ target: { value } }) => setSearchedName(value)}
+              />
+              <Button
+                variant="outline-secondary"
+                id="button-addon2"
+                onClick={handleSearchMember}
+              >
+                Button
+              </Button>
+            </InputGroup>
+          </Form>
             
-            
-            </Modal.Body>
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose1}>
             Close

@@ -48,6 +48,8 @@ export default function UserDashboard() {
   useEffect(async () => {
     let lsUserId = localStorage.getItem('UserId')
     setUserId(lsUserId);
+    let lsUsername = localStorage.getItem('Username');
+    setUsername(lsUsername);
     let allCreatedMWG1 = await GetAllMWGAUserIsMemberOfuserId(lsUserId);
     setAllCreatedMWG(allCreatedMWG1);
   }, []);
@@ -71,6 +73,8 @@ export default function UserDashboard() {
       allSearchedNames.push(searchedName);
       setAllSearchedNames([...allSearchedNames]);
       mwgMembersId.push(foundUser.id);
+      mwgMembersNames.push(searchedName);
+      setmwgMembersNames([...mwgMembersNames]);
       console.log(mwgMembersId);
       console.log(allSearchedNames);
     } else {
@@ -86,6 +90,7 @@ export default function UserDashboard() {
 
     const CreateMWG = async () => {
         mwgMembersId.push(userId);
+        mwgMembersNames.push(username);
         handleClose();
 
         let newMWG = {
@@ -93,6 +98,7 @@ export default function UserDashboard() {
             MWGName: mwgName,
             GroupCreatorId: userId,
             MembersId: mwgMembersId.join(","),
+            membersNames: mwgMembersNames.join(","),
             UserSuggestedMovies: '',
             IsDeleted: false
         }
@@ -103,6 +109,8 @@ export default function UserDashboard() {
 
         if (result) {
             console.log("yay it worked")
+            let mwg = await GetAllMWGAUserIsMemberOfuserId(userId);
+            setAllCreatedMWG([...mwg]);
             // setDisplayOfYourMWG = GetAllCreatedMWGByUserId(userId);
             // setDisplayOfMWGYourMemberOf = GetAllMWGAUserIsMemberOf(userId);
         }
