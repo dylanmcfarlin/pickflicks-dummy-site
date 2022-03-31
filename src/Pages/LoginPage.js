@@ -32,7 +32,7 @@ export default function LoginPage() {
             let userInfo = await GetUserByUsername(userData.username)
             setToken(localStorage.getItem('Token'));
             console.log(userInfo);
-            setUserId(userInfo.Id);
+            setUserId(userInfo.id);
             navigate("/dashboard");
         } else {
             // Do something
@@ -44,6 +44,7 @@ export default function LoginPage() {
     <>  
         <Container>
             <Row className='justify-content-center loginMarginTop'>
+            <h3 className="text-center">Log In</h3>
                 <Col md={3} className=''>
                     <Form>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -59,6 +60,11 @@ export default function LoginPage() {
                             </Button>
                         </div>
                     </Form>
+                </Col>
+            </Row>
+            <Row className="justify-content-center mt-5">
+                <Col xs={3}>
+                    <Button onClick={() => navigate("/createAcct")}>Click here to create an account</Button>
                 </Col>
             </Row>
         </Container>

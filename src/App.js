@@ -6,6 +6,7 @@ import LoginPage from './Pages/LoginPage';
 import Dashboard from './Pages/UserDashboard';
 import UserContext from './Context/UserContext';
 import UseUser from './Hooks/use-user';
+import CreateAcctPage from './Pages/CreateAcctPage';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         {/* <NavbarComponent /> */}
           <Routes>
             <Route path="/" element={<LoginPage />} />
+            <Route path="/createAcct" element={<CreateAcctPage/>} />
             <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
         </BrowserRouter>

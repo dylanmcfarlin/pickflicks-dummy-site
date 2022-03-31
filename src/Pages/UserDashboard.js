@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
@@ -11,27 +11,43 @@ import {
   ListGroup,
   InputGroup,
   FormControl,
-  Toast
+  Toast,
+  ToastContainer,
+  Card
 } from "react-bootstrap";
-import { AddMWG, GetAllUsers, AddMemberToMWG, GetUserByUsername } from "../Services/DataService";
+import { AddMWG, GetAllUsers, AddMemberToMWG, GetUserByUsername, GetAllCreatedMWGByUserId } from "../Services/DataService";
 import UserContext from "../Context/UserContext";
 
 export default function UserDashboard() {
 
     let { username, setUsername, userId, setUserId, token, setToken } = useContext(UserContext);
-
+    
+    const [showA, setShowA] = useState(false);
+    const toggleShowA = () => setShowA(!showA);
     const [show, setShow] = useState(false);
+
+
     const [allUsers, setAllUsers] = useState([]);
     const [searchedName, setSearchedName] = useState("");
+    const [allSearchedNames, setAllSearchedNames] = useState([])
     const [mwgName, setmwgName] = useState('');
     const [mwgMembersId, setmwgMembersId] = useState([]);
+    const [allCreatedMWG, setAllCreatedMWG] = useState([]);
+
+    useEffect(  async () => {
+        let allCreatedMWG1 = await GetAllCreatedMWGByUserId(userId);
+        console.log(allCreatedMWG1)
+        setAllCreatedMWG(allCreatedMWG1); 
+        
+      }, [])
+
     
     const handleClose = () => setShow(false);
     const handleShow = async () => {
         setShow(true);
-        let fetchedData = await GetAllUsers();
-        console.log(fetchedData);
-        setAllUsers(fetchedData);
+        // let fetchedData = await GetAllUsers();
+        // console.log(fetchedData);
+        // setAllUsers(fetchedData);
     }
     
     const AddMember = async (e) => {
@@ -40,37 +56,50 @@ export default function UserDashboard() {
 
     const handleClick = async () => {
         let foundUser = await GetUserByUsername(searchedName);
-        if(foundUser != null)
+        if(foundUser != null && foundUser.id != 0)
         {
             allSearchedNames.push(searchedName);
             setAllSearchedNames([...allSearchedNames]);
+            mwgMembersId.push(foundUser.id);
+            console.log(mwgMembersId);
             console.log(allSearchedNames);
         }else{
           console.log("noooo")
-            setShowA(!showA)
+          toggleShowA();
         }
     }
 
     const CreateMWG = async () => {
+        mwgMembersId.push(userId);
         handleClose();
 
         let newMWG = {
             Id: 0,  
             MWGName: mwgName,
             GroupCreatorId: userId,
-            MembersId: mwgMembersId,
+            MembersId: mwgMembersId.join(","),
             UserSuggestedMovies: '',
             IsDeleted: false
         }
+        console.log(newMWG)
 
       let result = await AddMWG(newMWG);
       AddMWG(newMWG)
 
         if (result) {
+            console.log("yay it worked")
             // setDisplayOfYourMWG = GetAllCreatedMWGByUserId(userId);
             // setDisplayOfMWGYourMemberOf = GetAllMWGAUserIsMemberOf(userId);
         }
     }
+
+
+    // useEffect( async() => {
+    //   let allCreatedMWG = await GetAllCreatedMWGByUserId(userId);
+    //     console.log(allCreatedMWG)
+    //     setAllCreatedMWG(allCreatedMWG); 
+    // }, [])
+
  
 
   return (
@@ -84,9 +113,36 @@ export default function UserDashboard() {
                 Create new Watch Group
               </Button>
             </Row>
+            <Row>
+                {
+                    allCreatedMWG.map((MWG) => {
+                        return (
+                            <Card>
+                                <Card.Body>{MWG.mwgName}</Card.Body>
+                            </Card>
+
+                        )
+                    })
+                }
+            </Row>
           </Col>
         </Row>
       </Container>
+      <ToastContainer position="bottom-center">
+        <Toast show={showA} onClose={toggleShowA} >
+          <Toast.Header>
+            <img
+              src="holder.js/20x20?text=%20"
+              className="rounded me-2"
+              alt=""
+            />
+            <strong className="me-auto">Bootstrap</strong>
+            <small>11 mins ago</small>
+          </Toast.Header>
+          <Toast.Body>Unable to add member to {mwgName}</Toast.Body>
+        </Toast>
+
+      </ToastContainer>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Create new Watch Group</Modal.Title>
@@ -94,6 +150,7 @@ export default function UserDashboard() {
 
         <Modal.Body>
           <Form>
+              <input type="text" onChange={({ target: { value } }) => setmwgName(value)}></input>
             <InputGroup className="mb-3">
               <FormControl
                 placeholder="Recipient's username"
@@ -135,18 +192,6 @@ export default function UserDashboard() {
             </Modal.Footer>
         </Modal>
 
-        <Toast show={showA} onClose={toggleShowA}>
-          <Toast.Header>
-            <img
-              src="holder.js/20x20?text=%20"
-              className="rounded me-2"
-              alt=""
-            />
-            <strong className="me-auto">Bootstrap</strong>
-            <small>11 mins ago</small>
-          </Toast.Header>
-          <Toast.Body>Woohoo, you're reading this text in a Toast!</Toast.Body>
-        </Toast>
     </>
   );
 }
