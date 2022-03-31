@@ -40,3 +40,7 @@
 .loginMarginTop {
   margin-top: 20% !important;
 }
+
+.pointer{
+  cursor: pointer;
+}

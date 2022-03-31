@@ -22,8 +22,10 @@ import {
   GetUserByUsername,
   GetAllCreatedMWGByUserId,
   GetAllMWGAUserIsMemberOfuserId,
+  GetMWGByMWGName
 } from "../Services/DataService";
 import UserContext from "../Context/UserContext";
+import CardComponent from "../Components/CardComponent";
 
 export default function UserDashboard() {
   let { username, setUsername, userId, setUserId, token, setToken } =
@@ -33,6 +35,7 @@ export default function UserDashboard() {
   const toggleShowA = () => setShowA(!showA);
   const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
+  const handleClose1 = () => setShow1(false);
 
   const [allUsers, setAllUsers] = useState([]);
   const [searchedName, setSearchedName] = useState("");
@@ -50,7 +53,7 @@ export default function UserDashboard() {
   }, []);
 
   const handleClose = () => setShow(false);
-  const handleClose1 = () => setShow1(false);
+
   const handleShow = async () => {
     setShow(true);
     // let fetchedData = await GetAllUsers();
@@ -75,7 +78,9 @@ export default function UserDashboard() {
       toggleShowA();
     }
   };
-  const handleShow1 = () => {
+  const handleShow1 = async (e) => {
+      console.log(e.target.textContent)
+    // let mwgInfo = await GetMWGByMWGName(e.target.textContent);
     setShow1(true);
   }
 
@@ -126,19 +131,23 @@ export default function UserDashboard() {
             <Row>
               <Row xs={1} md={2} className="g-4">
                 {allCreatedMWG.map((MWG) => {
-                    console.log(MWG)
-                    return (
-                        <Col>
-                        <Card onClick={handleShow1}>
-                        <Card.Body>
-                            <Card.Title>{MWG.mwgName}</Card.Title>
-                            <Card.Text>
-                            {MWG.membersNames}
-                            </Card.Text>
-                        </Card.Body>
-                        </Card>
-                    </Col>
-                    );
+                    if (!MWG.isDeleted) {
+                        console.log(MWG)
+                        return (
+                        //     <Col>
+                        //     <Card onClick={(e) => handleShow1(e)}>
+                        //     <Card.Body>
+                        //         <Card.Title>{MWG.mwgName}</Card.Title>
+                        //         <Card.Text>
+                        //         {MWG.membersNames}
+                        //         </Card.Text>
+                        //     </Card.Body>
+                        //     </Card>
+                        // </Col>
+                        <CardComponent props={MWG}/>
+                        );
+                        
+                    }
                 })}
                 
               </Row>
