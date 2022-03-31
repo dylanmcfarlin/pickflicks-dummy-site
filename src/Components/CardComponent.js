@@ -52,23 +52,22 @@ export default function CardComponent({ props }) {
 
     // Remove id
     let userInfo = await GetUserByUsername(e.target.textContent);
+    let userId2 = userInfo.id;
     console.log(userInfo.id);
-    
-    let indexOfDeletedMemberId = mwgMembersId.indexOf(userInfo.id);
+
+    let indexOfDeletedMemberId = mwgMembersId.split(',').indexOf(1);
     console.log(indexOfDeletedMemberId);
 
     let splicedDeletedMemberId = mwgMembersId.splice(indexOfDeletedMemberId, 1);
     console.log(mwgMembersId);
   }
 
-
- 
-
   const handleShow1 = async (e) => {
       console.log(e)
       console.log(props.mwgName)
       setmwgName(props.mwgName);
       setmwgMembersNames(props.membersNames.split(","));
+      setmwgMembersId(props.membersId.split(","));
       setShow1(true);
   };
 
