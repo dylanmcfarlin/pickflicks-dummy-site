@@ -91,8 +91,6 @@ async function GetMWGByMWGName(mwgName){
 }
 
 
-
-
 async function EditMWG(MWG){
     let res= await fetch('https://pickflicksapi.azurewebsites.net/MWG/EditMWG', {
         method: "POST",
@@ -102,10 +100,22 @@ async function EditMWG(MWG){
         body: JSON.stringify(MWG)
     });
     let data = await res.json();
-   return data;
+    return data;
+}
+
+async function EditMWGName(oldMWGName,updatedMWGName){
+    let res = await fetch(`https://pickflicksapi.azurewebsites.net/MWG/EditMWGName/${oldMWGName}/${updatedMWGName}`);
+    let data = await res.json();
+    return data;
+}
+async function DeleteMemberFromMWG (MWGId,deletedMemberId,deleteMemberName){
+    let res = await fetch(`https://pickflicksapi.azurewebsites.net/MWG/DeleteMemberFromMWG/${MWGId}/${deletedMemberId}/${deleteMemberName}`);
+    let data = await res.json();
+    return data;
 }
 
 
 
 
-export { AddUser, Login, GetUserByUsername, AddMWG, GetAllUsers, AddMemberToMWG, GetAllCreatedMWGByUserId, GetAllMWGAUserIsMemberOfuserId, EditMWG};
+
+export { AddUser, Login, GetUserByUsername, AddMWG, GetAllUsers, AddMemberToMWG, GetAllCreatedMWGByUserId, GetAllMWGAUserIsMemberOfuserId, EditMWG, EditMWGName, DeleteMemberFromMWG};
