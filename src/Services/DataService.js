@@ -92,4 +92,20 @@ async function GetMWGByMWGName(mwgName){
 
 
 
-export { AddUser, Login, GetUserByUsername, AddMWG, GetAllUsers, AddMemberToMWG, GetAllCreatedMWGByUserId, GetAllMWGAUserIsMemberOfuserId, GetMWGByMWGName};
+
+async function EditMWG(MWG){
+    let res= await fetch('https://pickflicksapi.azurewebsites.net/MWG/EditMWG', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(MWG)
+    });
+    let data = await res.json();
+   return data;
+}
+
+
+
+
+export { AddUser, Login, GetUserByUsername, AddMWG, GetAllUsers, AddMemberToMWG, GetAllCreatedMWGByUserId, GetAllMWGAUserIsMemberOfuserId, EditMWG};
