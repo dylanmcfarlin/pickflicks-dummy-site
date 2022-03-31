@@ -84,7 +84,7 @@ export default function UserDashboard() {
         console.log(newMWG)
 
       let result = await AddMWG(newMWG);
-      AddMWG(newMWG)
+    //   AddMWG(newMWG)
 
         if (result) {
             console.log("yay it worked")
