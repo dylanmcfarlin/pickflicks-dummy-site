@@ -1,6 +1,6 @@
 import React, {useState, useContext} from 'react'
 import {Form, Row, Col, Container, Button, ToastContainer, Toast} from 'react-bootstrap'
-import { AddUser, GetUserByUsername } from '../Services/DataService'
+import { AddUser, GetUserByUsername, Login } from '../Services/DataService'
 import { useNavigate } from 'react-router-dom';
 import UserContext from '../Context/UserContext';
 
@@ -13,7 +13,6 @@ export default function CreateAcctPage() {
     const toggleShowA = () => setShowA(!showA);
 
     const handleSubmit = async (e) => {
-        
         e.preventDefault();
         let newUserData = {
             username: username,
@@ -22,6 +21,9 @@ export default function CreateAcctPage() {
             let result = await AddUser(newUserData)
         if(result){
             //should the use login too to get token
+            let fetchedToken = await Login(newUserData);
+            localStorage.setItem('Token', fetchedToken.token);
+            setToken(fetchedToken.token);
             let userInfo = await GetUserByUsername(username);
             setUsername(userInfo.username);
             setUserId(userInfo.id);

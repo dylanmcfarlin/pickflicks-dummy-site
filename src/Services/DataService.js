@@ -68,6 +68,17 @@ async function GetAllCreatedMWGByUserId(userId){
     return data;
 }
 
+async function GetAllMWGAUserIsMemberOfuserId(userId){
+    let res = await fetch('https://pickflicksapi.azurewebsites.net/MWG/GetAllMWGAUserIsMemberOf/' + (userId));
+    if(!res.ok)
+    {
+        const message = `An error has occured ${res.status}`
+        throw new Error(message);
+    }
+    let data = await res.json();
+    return data;
+}
 
 
-export { AddUser, Login, GetUserByUsername, AddMWG, GetAllUsers, AddMemberToMWG, GetAllCreatedMWGByUserId };
+
+export { AddUser, Login, GetUserByUsername, AddMWG, GetAllUsers, AddMemberToMWG, GetAllCreatedMWGByUserId, GetAllMWGAUserIsMemberOfuserId};
