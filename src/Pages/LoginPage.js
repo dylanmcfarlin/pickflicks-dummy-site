@@ -30,6 +30,8 @@ export default function LoginPage() {
         if (fetchedToken.token != null) {
             localStorage.setItem('Token', fetchedToken.token);
             let userInfo = await GetUserByUsername(userData.username)
+            localStorage.setItem('Username', userInfo.username);
+            localStorage.setItem('UserId', userInfo.id);
             setToken(localStorage.getItem('Token'));
             console.log(userInfo);
             setUserId(userInfo.id);
