@@ -22,7 +22,10 @@ import {
   GetUserByUsername,
   GetAllCreatedMWGByUserId,
   GetAllMWGAUserIsMemberOfuserId,
-  GetMWGByMWGName
+  GetMWGByMWGName,
+  AddMovieToMWG,
+  fetchFromAPIFromPageNumber,
+  fetchFromAPI
 } from "../Services/DataService";
 import UserContext from "../Context/UserContext";
 import CardComponent from "../Components/CardComponent";
@@ -116,6 +119,56 @@ export default function UserDashboard() {
         }
     }
 
+    const handleAddMovie = async () => {
+      let newMovie = {
+        Id: 0,
+        MWGId: 1,
+        SessionId: 1,
+        MovieName: 'Anne Frank',
+        MovieOverview: 'She dies',
+        MovieReleaseYear: 2006,
+        MovieIMDBRating: 6,
+        MovieImage: 'image.jpg'
+      }
+      let result = await AddMovieToMWG(newMovie)
+      console.log(result);
+    }
+    
+    const fetchFromAPIBtn = async () => {
+      let result = await fetchFromAPI();
+      //console.log(result);
+      let totalPages = result.total_pages;
+      let rNum = Math.floor(Math.random()*totalPages);
+      console.log(rNum);
+      let totalMovies = await fetchFromAPIFromPageNumber(rNum);
+      console.log(totalMovies);
+
+      let randomList = [];
+      for(let i=0; i< 20; i++)
+      {
+        let newRnum = Math.floor(Math.random()*250)
+        if(!randomList.includes(newRnum))
+        {
+          randomList.push(totalMovies.titles[newRnum].title)
+        }
+      }
+      console.log(randomList)
+      //go thru randomList array and fetch each movie
+      for(let i=0; i<randomList.length; i++)
+      {
+        let newMovieObject = await 
+        let newMovieToAdd = {
+          Id: 0,
+          MWGId: 1,
+          SessionId: 0,
+          MovieName: ,
+          MovieOverview: 'She dies',
+          MovieReleaseYear: 2006,
+          MovieIMDBRating: 6,
+          MovieImage: 'image.jpg'
+        }
+      }
+    }
 
     // useEffect( async() => {
     //   let allCreatedMWG = await GetAllCreatedMWGByUserId(userId);
@@ -161,6 +214,13 @@ export default function UserDashboard() {
               </Row>
             </Row>
           </Col>
+        </Row>
+        
+        <Row className="mt-5">
+          <Button onClick={handleAddMovie}>Add Movie to MovieModel</Button>
+        </Row>
+        <Row className="mt-5">
+          <Button onClick={fetchFromAPIBtn}>Get total number of pages</Button>
         </Row>
       </Container>
       <ToastContainer position="bottom-center">

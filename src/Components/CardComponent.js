@@ -55,11 +55,13 @@ export default function CardComponent({ props }) {
     let userId2 = userInfo.id;
     console.log(userInfo.id);
 
-    let indexOfDeletedMemberId = mwgMembersId.split(',').indexOf(1);
+    console.log(mwgMembersId);
+    let indexOfDeletedMemberId = mwgMembersId.indexOf(userInfo.id.toString());
     console.log(indexOfDeletedMemberId);
 
     let splicedDeletedMemberId = mwgMembersId.splice(indexOfDeletedMemberId, 1);
     console.log(mwgMembersId);
+
   }
 
   const handleShow1 = async (e) => {

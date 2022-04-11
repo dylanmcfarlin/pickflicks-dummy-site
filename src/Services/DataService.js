@@ -114,8 +114,38 @@ async function DeleteMemberFromMWG (MWGId,deletedMemberId,deleteMemberName){
     return data;
 }
 
+async function AddMovieToMWG(newMovie){
+    let res= await fetch(`http://localhost:5238/Movie/AddMovie`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newMovie)
+    });
+    let data = await res.json();
+   return data;
+}
+
+async function fetchFromAPI(){
+    let res = await fetch(`https://api.watchmode.com/v1/list-titles/?apiKey=h4xYuoaDgHHU19yy6I3jDqjH7ZoPQ9ruXtNJ6buj&types=movie&genres=4&page=1&source_ids=203&regions=US`);
+    let data = await res.json();
+    return data; 
+}
+
+async function fetchFromAPIFromPageNumber(pageNumber){
+    let res = await fetch(`https://api.watchmode.com/v1/list-titles/?apiKey=h4xYuoaDgHHU19yy6I3jDqjH7ZoPQ9ruXtNJ6buj&types=movie&genres=4&page=${pageNumber}&source_ids=203&regions=US`);
+    let data = await res.json();
+    return data; 
+}
+
+async function fetchFromAPIByTitle(movieTitle){
+    let res = await fetch(`https://api.watchmode.com/v1/list-titles/?apiKey=h4xYuoaDgHHU19yy6I3jDqjH7ZoPQ9ruXtNJ6buj&types=movie&genres=4&page=${pageNumber}&source_ids=203&regions=US`);
+    let data = await res.json();
+    return data; 
+}
 
 
 
 
-export { AddUser, Login, GetUserByUsername, AddMWG, GetAllUsers, AddMemberToMWG, GetAllCreatedMWGByUserId, GetAllMWGAUserIsMemberOfuserId, EditMWG, EditMWGName, DeleteMemberFromMWG};
+
+export { AddUser, Login, GetUserByUsername, AddMWG, fetchFromAPI, fetchFromAPIFromPageNumber, GetAllUsers, AddMemberToMWG, GetAllCreatedMWGByUserId, GetAllMWGAUserIsMemberOfuserId, EditMWG, EditMWGName, DeleteMemberFromMWG, AddMovieToMWG}
