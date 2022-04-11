@@ -124,7 +124,7 @@ export default function UserDashboard() {
       let newMovie = {
         Id: 0,
         MWGId: 1,
-        SessionId: 1,
+        SessionId: 0,
         MovieName: 'Anne Frank',
         MovieOverview: 'She dies',
         MovieReleaseYear: 2006,
@@ -147,7 +147,7 @@ export default function UserDashboard() {
       let randomList = [];
       for(let i=0; i< 20; i++)
       {
-        let newRnum = Math.floor(Math.random()*250);
+        let newRnum = Math.floor(Math.random()*totalMovies.titles.length);
         if(!randomList.includes(newRnum))
         {
           randomList.push(totalMovies.titles[newRnum].id)
@@ -159,20 +159,23 @@ export default function UserDashboard() {
       {
         let newMovieObject = await fetchFromAPIByTitle(randomList[i])
         console.log(newMovieObject);
-
-        let newMovieToAdd = {
-          Id: 0,
-          MWGId: 1,
-          SessionId: 0,
-          MovieName: newMovieObject.title,
-          MovieOverview: newMovieObject.plot_overview,
-          MovieReleaseYear: newMovieObject.year,
-          MovieIMDBRating: newMovieObject.user_rating,
-          MovieImage: newMovieObject.poster
+        
+        if(newMovieObject != null)
+        {
+          let newMovieToAdd = {
+            Id: 0,
+            MWGId: 1,
+            SessionId: 0,
+            MovieName: newMovieObject.title,
+            MovieOverview: newMovieObject.plot_overview,
+            MovieReleaseYear: newMovieObject.year,
+            MovieIMDBRating: 1,
+            MovieImage: newMovieObject.poster
+          }
+          console.log(newMovieToAdd);
+          let result = await AddMovieToMWG(newMovieToAdd);
+          console.log(result);
         }
-
-        let result = await AddMovieToMWG(newMovieToAdd);
-        console.log(result);
       }
     }
 
