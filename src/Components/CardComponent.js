@@ -35,7 +35,7 @@ export default function CardComponent({ props }) {
       console.log(result);
       if (result) {
         let allMWG = await GetAllMWGAUserIsMemberOfuserId(userId);
-        setAllCreatedMWG([...allMWG]);
+        setAllCreatedMWG(allCreatedMWG);
         handleClose1();
       }
   }
@@ -55,7 +55,7 @@ export default function CardComponent({ props }) {
     let userId2 = userInfo.id;
     console.log(userInfo.id);
 
-    let indexOfDeletedMemberId = mwgMembersId.split(',').indexOf(1);
+    let indexOfDeletedMemberId = mwgMembersId.indexOf(userInfo.id.toString());
     console.log(indexOfDeletedMemberId);
 
     let splicedDeletedMemberId = mwgMembersId.splice(indexOfDeletedMemberId, 1);
@@ -68,6 +68,7 @@ export default function CardComponent({ props }) {
       setmwgName(props.mwgName);
       setmwgMembersNames(props.membersNames.split(","));
       setmwgMembersId(props.membersId.split(","));
+      console.log(props.membersId);
       setShow1(true);
   };
 
