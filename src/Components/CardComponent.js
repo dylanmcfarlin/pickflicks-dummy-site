@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Col, Card, Modal, Form, InputGroup, FormControl, Button, ListGroup, Row } from "react-bootstrap";
 import UserContext from "../Context/UserContext";
 import { GetUserByUsername, EditMWG, GetAllMWGAUserIsMemberOfuserId } from '../Services/DataService';
@@ -20,6 +20,7 @@ export default function CardComponent({ props }) {
   const [mwgMembersId, setmwgMembersId] = useState([]);
   const [mwgMembersNames, setmwgMembersNames] = useState([]);
   const [allCreatedMWG, setAllCreatedMWG] = useState([]);
+
 
   const handleUpdateMWG = async () => {
       let updatedMWG = {
@@ -52,7 +53,6 @@ export default function CardComponent({ props }) {
 
     // Remove id
     let userInfo = await GetUserByUsername(e.target.textContent);
-    let userId2 = userInfo.id;
     console.log(userInfo.id);
 
     let indexOfDeletedMemberId = mwgMembersId.indexOf(userInfo.id.toString());
@@ -60,6 +60,7 @@ export default function CardComponent({ props }) {
 
     let splicedDeletedMemberId = mwgMembersId.splice(indexOfDeletedMemberId, 1);
     console.log(mwgMembersId);
+
   }
 
   const handleShow1 = async (e) => {
