@@ -25,7 +25,8 @@ import {
   GetMWGByMWGName,
   AddMovieToMWG,
   fetchFromAPIFromPageNumber,
-  fetchFromAPI
+  fetchFromAPI,
+  fetchFromAPIByTitle
 } from "../Services/DataService";
 import UserContext from "../Context/UserContext";
 import CardComponent from "../Components/CardComponent";
@@ -138,7 +139,7 @@ export default function UserDashboard() {
       let result = await fetchFromAPI();
       //console.log(result);
       let totalPages = result.total_pages;
-      let rNum = Math.floor(Math.random()*totalPages);
+      let rNum = Math.floor(Math.random()*totalPages) + 1;
       console.log(rNum);
       let totalMovies = await fetchFromAPIFromPageNumber(rNum);
       console.log(totalMovies);
@@ -146,27 +147,32 @@ export default function UserDashboard() {
       let randomList = [];
       for(let i=0; i< 20; i++)
       {
-        let newRnum = Math.floor(Math.random()*250)
+        let newRnum = Math.floor(Math.random()*250);
         if(!randomList.includes(newRnum))
         {
-          randomList.push(totalMovies.titles[newRnum].title)
+          randomList.push(totalMovies.titles[newRnum].id)
         }
       }
       console.log(randomList)
       //go thru randomList array and fetch each movie
       for(let i=0; i<randomList.length; i++)
       {
-        let newMovieObject = await 
+        let newMovieObject = await fetchFromAPIByTitle(randomList[i])
+        console.log(newMovieObject);
+
         let newMovieToAdd = {
           Id: 0,
           MWGId: 1,
           SessionId: 0,
-          MovieName: ,
-          MovieOverview: 'She dies',
-          MovieReleaseYear: 2006,
-          MovieIMDBRating: 6,
-          MovieImage: 'image.jpg'
+          MovieName: newMovieObject.title,
+          MovieOverview: newMovieObject.plot_overview,
+          MovieReleaseYear: newMovieObject.year,
+          MovieIMDBRating: newMovieObject.user_rating,
+          MovieImage: newMovieObject.poster
         }
+
+        let result = await AddMovieToMWG(newMovieToAdd);
+        console.log(result);
       }
     }
 

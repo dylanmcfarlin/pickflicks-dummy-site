@@ -138,8 +138,8 @@ async function fetchFromAPIFromPageNumber(pageNumber){
     return data; 
 }
 
-async function fetchFromAPIByTitle(movieTitle){
-    let res = await fetch(`https://api.watchmode.com/v1/list-titles/?apiKey=h4xYuoaDgHHU19yy6I3jDqjH7ZoPQ9ruXtNJ6buj&types=movie&genres=4&page=${pageNumber}&source_ids=203&regions=US`);
+async function fetchFromAPIByTitle(movieTitleId){
+    let res = await fetch(`https://api.watchmode.com/v1/title/${movieTitleId}/details/?apiKey=h4xYuoaDgHHU19yy6I3jDqjH7ZoPQ9ruXtNJ6buj`);
     let data = await res.json();
     return data; 
 }
@@ -148,4 +148,4 @@ async function fetchFromAPIByTitle(movieTitle){
 
 
 
-export { AddUser, Login, GetUserByUsername, AddMWG, fetchFromAPI, fetchFromAPIFromPageNumber, GetAllUsers, AddMemberToMWG, GetAllCreatedMWGByUserId, GetAllMWGAUserIsMemberOfuserId, EditMWG, EditMWGName, DeleteMemberFromMWG, AddMovieToMWG}
+export { AddUser, Login, GetUserByUsername, AddMWG, fetchFromAPI, fetchFromAPIByTitle, fetchFromAPIFromPageNumber, GetAllUsers, AddMemberToMWG, GetAllCreatedMWGByUserId, GetAllMWGAUserIsMemberOfuserId, EditMWG, EditMWGName, DeleteMemberFromMWG, AddMovieToMWG}
